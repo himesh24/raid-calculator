@@ -1,0 +1,669 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead 
+			title={`RAID Levels Explained - Complete Guide | ${SITE_TITLE}`} 
+			description="Comprehensive guide to all RAID levels: 0, 1, 1E, 10, 5, 50, 5E, 5EE, 6, and 60. Learn capacity formulas, failure tolerance, performance characteristics, and when to use each RAID configuration." 
+		/>
+	</head>
+	<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-purple-900 dark:to-slate-900">
+		<Header />
+		<main class="py-12 px-4">
+			<div class="max-w-5xl mx-auto">
+				<!-- Hero -->
+				<div class="text-center mb-12">
+					<h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+						RAID Levels Explained
+					</h1>
+					<p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+						Complete guide to understanding RAID 0, 1, 1E, 10, 5, 50, 5E, 5EE, 6, and 60 configurations - from basic concepts to advanced implementation strategies
+					</p>
+				</div>
+
+				<!-- Table of Contents -->
+				<div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 mb-12">
+					<h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Table of Contents</h2>
+					<div class="grid md:grid-cols-2 gap-3">
+						<a href="#raid0" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 0 - Striping</a>
+						<a href="#raid1" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 1 - Mirroring</a>
+						<a href="#raid1e" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 1E - Enhanced Mirroring</a>
+						<a href="#raid10" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 10 - Mirrored Stripes</a>
+						<a href="#raid5" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 5 - Single Parity</a>
+						<a href="#raid6" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 6 - Dual Parity</a>
+						<a href="#raid5e" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 5E - RAID 5 Enhanced</a>
+						<a href="#raid5ee" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 5EE - RAID 5 Enhanced Extended</a>
+						<a href="#raid50" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 50 - Striped RAID 5</a>
+						<a href="#raid60" class="text-blue-600 dark:text-blue-400 hover:underline">RAID 60 - Striped RAID 6</a>
+					</div>
+				</div>
+
+				<!-- RAID 0 -->
+				<section id="raid0" class="mb-16 scroll-mt-8">
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+						<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">RAID 0 - Striping</h2>
+						
+						<div class="grid md:grid-cols-3 gap-4 mb-6">
+							<div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Minimum Drives</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">2</div>
+							</div>
+							<div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">100%</div>
+							</div>
+							<div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">0 drives</div>
+							</div>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">How It Works</h3>
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							RAID 0 splits data across multiple drives (striping) without any redundancy. Each file is divided into blocks that are written to different drives simultaneously, maximizing performance and capacity.
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Capacity Formula</h3>
+						<code class="block bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4">
+							Usable Capacity = Sum of all drive capacities
+						</code>
+						<p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+							Example: 4× 4TB drives = 16TB usable
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Pros</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Maximum storage efficiency (100% capacity)</li>
+							<li>Excellent read and write performance</li>
+							<li>Simple to implement</li>
+							<li>Low cost per TB</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Cons</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li><strong>No redundancy</strong> - any drive failure loses all data</li>
+							<li>Higher failure risk with more drives (N-times the AFR)</li>
+							<li>Not suitable for critical data</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Best Use Cases</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+							<li>Video editing scratch disks</li>
+							<li>Gaming storage with backups elsewhere</li>
+							<li>Temporary data processing</li>
+							<li>Cache or staging areas</li>
+							<li>When performance matters more than data safety</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- RAID 1 -->
+				<section id="raid1" class="mb-16 scroll-mt-8">
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+						<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">RAID 1 - Mirroring</h2>
+						
+						<div class="grid md:grid-cols-3 gap-4 mb-6">
+							<div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Minimum Drives</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">2</div>
+							</div>
+							<div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">50%</div>
+							</div>
+							<div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">1 drive</div>
+							</div>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">How It Works</h3>
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							RAID 1 creates an exact copy (mirror) of data on two or more drives. Every write operation is duplicated to all drives in the mirror set, providing complete redundancy.
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Capacity Formula</h3>
+						<code class="block bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4">
+							Usable Capacity = (Number of drives / 2) × Smallest drive size
+						</code>
+						<p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+							Example: 4× 4TB drives = 8TB usable (50% efficiency)
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Pros</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Simple and reliable redundancy</li>
+							<li>Fast read performance (can read from multiple drives)</li>
+							<li>Quick rebuild time (just copy the mirror)</li>
+							<li>Can survive one drive failure</li>
+							<li>No complex parity calculations</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Cons</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>50% capacity efficiency (expensive per TB)</li>
+							<li>Write performance same as single drive</li>
+							<li>Not ideal for large arrays (RAID 5/6 better for 4+ drives)</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Best Use Cases</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+							<li>2-bay NAS systems</li>
+							<li>Boot/OS drives requiring redundancy</li>
+							<li>Database transaction logs</li>
+							<li>Critical data with 2-4 drives</li>
+							<li>When simplicity and reliability are priorities</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- RAID 1E -->
+				<section id="raid1e" class="mb-16 scroll-mt-8">
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+						<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">RAID 1E - Enhanced Mirroring</h2>
+						
+						<div class="grid md:grid-cols-3 gap-4 mb-6">
+							<div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Minimum Drives</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">3</div>
+							</div>
+							<div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">50%</div>
+							</div>
+							<div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">1 drive</div>
+							</div>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">How It Works</h3>
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							RAID 1E is an enhancement of RAID 1 that supports odd numbers of drives by distributing mirrored data across all drives in a striped pattern. Unlike RAID 1, which creates discrete mirror pairs, RAID 1E distributes mirrors across the array.
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Key Differences from RAID 1</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Supports odd number of drives (3, 5, 7, etc.)</li>
+							<li>Better rebuild performance (uses all drives)</li>
+							<li>More flexible than traditional RAID 1</li>
+							<li>Mirrors are offset/staggered across drives</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Best Use Cases</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+							<li>When you have an odd number of drives</li>
+							<li>Better rebuild performance than RAID 1 needed</li>
+							<li>3 or 5-bay systems where RAID 5 isn't desired</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- RAID 10 -->
+				<section id="raid10" class="mb-16 scroll-mt-8">
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+						<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">RAID 10 - Mirrored Stripes (RAID 1+0)</h2>
+						
+						<div class="grid md:grid-cols-3 gap-4 mb-6">
+							<div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Minimum Drives</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">4 (even)</div>
+							</div>
+							<div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">50%</div>
+							</div>
+							<div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">1 per pair</div>
+							</div>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">How It Works</h3>
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							RAID 10 combines mirroring (RAID 1) and striping (RAID 0). Drives are paired into mirrors first, then data is striped across the mirror pairs. This provides both high performance and redundancy.
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Capacity Formula</h3>
+						<code class="block bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4">
+							Usable Capacity = (Total drives / 2) × Smallest drive size
+						</code>
+						<p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+							Example: 8× 4TB drives = 16TB usable (4 mirror pairs, 50% efficiency)
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Pros</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Excellent read and write performance</li>
+							<li>High redundancy (can survive multiple failures if they're in different pairs)</li>
+							<li>Fast rebuild (just copy the mirror)</li>
+							<li>No parity calculation overhead</li>
+							<li>Better random I/O than RAID 5/6</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Cons</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>50% capacity efficiency (expensive)</li>
+							<li>Requires even number of drives (minimum 4)</li>
+							<li>Can fail if both drives in a mirror pair fail</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Best Use Cases</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+							<li>Database servers (SQL, Oracle, MongoDB)</li>
+							<li>High-transaction applications</li>
+							<li>Virtual machine datastores</li>
+							<li>Email servers</li>
+							<li>When both performance and redundancy are critical</li>
+							<li>4-8 drive systems with high I/O workloads</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- RAID 5 -->
+				<section id="raid5" class="mb-16 scroll-mt-8">
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+						<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">RAID 5 - Single Parity Striping</h2>
+						
+						<div class="grid md:grid-cols-3 gap-4 mb-6">
+							<div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Minimum Drives</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">3</div>
+							</div>
+							<div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">67-87%</div>
+							</div>
+							<div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">1 drive</div>
+							</div>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">How It Works</h3>
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							RAID 5 stripes data and parity information across all drives. Parity allows the array to reconstruct data if one drive fails. The parity is distributed evenly so no single drive is a bottleneck.
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Capacity Formula</h3>
+						<code class="block bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4">
+							Usable Capacity = (N - 1) × Smallest drive size
+						</code>
+						<p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+							Example: 5× 4TB drives = 16TB usable (80% efficiency)
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Pros</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Good balance of capacity, performance, and redundancy</li>
+							<li>Better capacity efficiency than RAID 1/10</li>
+							<li>Good read performance</li>
+							<li>Industry standard for 3-8 drive arrays</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Cons</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Write performance penalty due to parity calculations</li>
+							<li>Vulnerable during rebuild (no redundancy if another drive fails)</li>
+							<li><strong>URE risk with large drives (&gt;8TB)</strong> - consider RAID 6</li>
+							<li>Slow rebuild times on large drives</li>
+							<li>Poor random write performance</li>
+						</ul>
+
+						<div class="bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-500 p-4 mb-4">
+							<p class="text-yellow-900 dark:text-yellow-200 font-semibold">
+								Warning: RAID 5 with drives larger than 8-10TB has increased risk of data loss during rebuild due to URE probability. Consider RAID 6 for large drives.
+							</p>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Best Use Cases</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+							<li>General-purpose file servers</li>
+							<li>NAS with 3-6 drives of ≤8TB each</li>
+							<li>Media storage (read-heavy workloads)</li>
+							<li>Backup targets</li>
+							<li>When capacity efficiency matters more than write speed</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- RAID 6 -->
+				<section id="raid6" class="mb-16 scroll-mt-8">
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+						<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">RAID 6 - Dual Parity Striping</h2>
+						
+						<div class="grid md:grid-cols-3 gap-4 mb-6">
+							<div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Minimum Drives</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">4</div>
+							</div>
+							<div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">50-83%</div>
+							</div>
+							<div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">2 drives</div>
+							</div>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">How It Works</h3>
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							RAID 6 extends RAID 5 by using two independent parity calculations. This allows the array to survive two simultaneous drive failures. The dual parity provides significantly better protection during rebuilds and for large-capacity drives.
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Capacity Formula</h3>
+						<code class="block bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4">
+							Usable Capacity = (N - 2) × Smallest drive size
+						</code>
+						<p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+							Example: 8× 12TB drives = 72TB usable (75% efficiency)
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Pros</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Can survive two simultaneous drive failures</li>
+							<li>Much safer during rebuild than RAID 5</li>
+							<li>Recommended for drives &gt;8TB</li>
+							<li>Better URE protection during rebuild</li>
+							<li>Good for mission-critical data</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Cons</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Lower capacity efficiency than RAID 5 (two parity drives)</li>
+							<li>Worse write performance than RAID 5 (more parity overhead)</li>
+							<li>Longer rebuild times</li>
+							<li>Requires minimum 4 drives (not efficient until 6+)</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Best Use Cases</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+							<li>Arrays with large drives (8TB-24TB)</li>
+							<li>Mission-critical data requiring high availability</li>
+							<li>Archival storage (write-once, read-many)</li>
+							<li>When two-drive failure protection is needed</li>
+							<li>6-24 drive enterprise arrays</li>
+							<li>24/7 production environments</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- RAID 5E and 5EE (Combined) -->
+				<section id="raid5e" class="mb-16 scroll-mt-8">
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+						<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">RAID 5E & 5EE - Enhanced RAID 5</h2>
+						
+						<div class="grid md:grid-cols-3 gap-4 mb-6">
+							<div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Minimum Drives</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">4</div>
+							</div>
+							<div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">50-75%</div>
+							</div>
+							<div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">1 drive</div>
+							</div>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">How They Work</h3>
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							RAID 5E and 5EE are variants of RAID 5 with integrated distributed spare capacity. Instead of dedicating entire drives as hot spares, the spare capacity is distributed across all drives.
+						</p>
+
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							<strong>RAID 5E:</strong> Integrates spare space equivalent to one drive distributed across the array.<br>
+							<strong>RAID 5EE:</strong> Enhanced version with better spare distribution and potentially better performance.
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Capacity Formula</h3>
+						<code class="block bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4">
+							Usable Capacity = (N - 2) × Smallest drive size
+						</code>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Advantages Over RAID 5</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Faster rebuild (uses spare capacity distributed across all drives)</li>
+							<li>Better performance during rebuild</li>
+							<li>Automatic spare integration (no dedicated hot spare needed)</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Best Use Cases</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+							<li>When faster rebuild than RAID 5 is desired</li>
+							<li>Systems where hot spare management is complex</li>
+							<li>Controllers that support these levels natively</li>
+						</ul>
+
+						<div class="bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blue-500 p-4">
+							<p class="text-blue-900 dark:text-blue-200 text-sm">
+								<strong>Note:</strong> RAID 5E and 5EE are less common than standard RAID 5 or 6. Check your hardware controller or software RAID support before planning.
+							</p>
+						</div>
+					</div>
+				</section>
+
+				<!-- RAID 50 -->
+				<section id="raid50" class="mb-16 scroll-mt-8">
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+						<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">RAID 50 - Striped RAID 5 (RAID 5+0)</h2>
+						
+						<div class="grid md:grid-cols-3 gap-4 mb-6">
+							<div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Minimum Drives</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">6</div>
+							</div>
+							<div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">67-83%</div>
+							</div>
+							<div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">1 per group</div>
+							</div>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">How It Works</h3>
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							RAID 50 combines RAID 5 and RAID 0. Multiple RAID 5 arrays (minimum 2 groups) are striped together. This provides better performance than single RAID 5 while maintaining single-drive fault tolerance per RAID 5 group.
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Capacity Formula</h3>
+						<code class="block bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4">
+							Usable = (Number of groups) × (Drives per group - 1) × Smallest drive
+						</code>
+						<p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+							Example: 12 drives in 2 groups of 6 = 2 × 5 × 4TB = 40TB usable (83% efficiency)
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Pros</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Better write performance than single RAID 5</li>
+							<li>Improved fault tolerance across groups</li>
+							<li>Faster rebuild than large single RAID 5</li>
+							<li>Suitable for large drive counts (12-24 drives)</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Cons</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Complex setup and management</li>
+							<li>Requires minimum 6 drives (not cost-effective below 8-12)</li>
+							<li>Can fail if two drives in same RAID 5 group fail</li>
+							<li>Lower capacity efficiency than RAID 5 (multiple parity drives)</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Best Use Cases</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+							<li>Large storage arrays (12-24 drives)</li>
+							<li>High-performance file servers</li>
+							<li>Video surveillance systems</li>
+							<li>When RAID 5 performance isn't enough but RAID 10 too expensive</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- RAID 60 -->
+				<section id="raid60" class="mb-16 scroll-mt-8">
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+						<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">RAID 60 - Striped RAID 6 (RAID 6+0)</h2>
+						
+						<div class="grid md:grid-cols-3 gap-4 mb-6">
+							<div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Minimum Drives</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">8</div>
+							</div>
+							<div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">50-75%</div>
+							</div>
+							<div class="bg-red-50 dark:bg-red-900/30 p-4 rounded-lg">
+								<div class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance</div>
+								<div class="text-2xl font-bold text-gray-900 dark:text-white">2 per group</div>
+							</div>
+						</div>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">How It Works</h3>
+						<p class="text-gray-700 dark:text-gray-300 mb-4">
+							RAID 60 is RAID 6 + RAID 0. Multiple RAID 6 arrays are striped together. This provides the ultimate combination of performance, capacity, and redundancy for very large enterprise arrays.
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Capacity Formula</h3>
+						<code class="block bg-gray-100 dark:bg-gray-700 p-3 rounded mb-4">
+							Usable = (Number of groups) × (Drives per group - 2) × Smallest drive
+						</code>
+						<p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+							Example: 16 drives in 2 groups of 8 = 2 × 6 × 12TB = 144TB usable (75% efficiency)
+						</p>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Pros</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Maximum redundancy (two drive failures per group)</li>
+							<li>Excellent for very large drives and massive arrays</li>
+							<li>Better performance than single RAID 6</li>
+							<li>Can survive multiple drive failures across groups</li>
+							<li>Safer rebuild than RAID 50</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Cons</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 mb-4">
+							<li>Very complex to set up and manage</li>
+							<li>Expensive (requires minimum 8 drives)</li>
+							<li>Lower capacity efficiency than RAID 50</li>
+							<li>Write performance penalty from dual parity</li>
+						</ul>
+
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Best Use Cases</h3>
+						<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2">
+							<li>Enterprise data centers</li>
+							<li>Mission-critical storage with 16-48 drives</li>
+							<li>Large-capacity archive systems</li>
+							<li>When maximum data protection is required</li>
+							<li>Cloud storage providers</li>
+							<li>Big data applications requiring both performance and reliability</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- Quick Comparison Table -->
+				<section class="mb-16">
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">Quick Comparison Table</h2>
+					<div class="overflow-x-auto bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+						<table class="w-full">
+							<thead class="bg-gray-100 dark:bg-gray-700">
+								<tr>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Level</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Min</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Capacity</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Tolerance</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Performance</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Best For</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+								<tr>
+									<td class="px-4 py-3 font-medium text-gray-900 dark:text-white">0</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">2</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">100%</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">0</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Excellent</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Speed, temp data</td>
+								</tr>
+								<tr>
+									<td class="px-4 py-3 font-medium text-gray-900 dark:text-white">1</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">2</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">50%</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">1</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Good</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">2-4 drives, critical</td>
+								</tr>
+								<tr>
+									<td class="px-4 py-3 font-medium text-gray-900 dark:text-white">5</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">3</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">67-87%</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">1</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Good</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">General NAS, ≤8TB drives</td>
+								</tr>
+								<tr>
+									<td class="px-4 py-3 font-medium text-gray-900 dark:text-white">6</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">4</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">50-83%</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">2</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Good</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Large drives, critical</td>
+								</tr>
+								<tr>
+									<td class="px-4 py-3 font-medium text-gray-900 dark:text-white">10</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">4</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">50%</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">1/pair</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Excellent</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Databases, VMs</td>
+								</tr>
+								<tr>
+									<td class="px-4 py-3 font-medium text-gray-900 dark:text-white">50</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">6</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">67-83%</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">1/group</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Very Good</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Large arrays 12-24</td>
+								</tr>
+								<tr>
+									<td class="px-4 py-3 font-medium text-gray-900 dark:text-white">60</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">8</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">50-75%</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">2/group</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Very Good</td>
+									<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">Enterprise 16-48</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- CTA -->
+				<div class="text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8">
+					<h2 class="text-3xl font-bold text-white mb-4">
+						Ready to Calculate Your RAID Configuration?
+					</h2>
+					<p class="text-xl text-blue-100 mb-6">
+						Use our calculator to see capacity, costs, and risks for your specific setup
+					</p>
+					<a href="/calculator" class="inline-block px-8 py-4 bg-white text-blue-600 text-lg font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
+						Launch Calculator
+					</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

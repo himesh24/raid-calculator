@@ -1,0 +1,179 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const faqs = [
+	{
+		question: "Is RAID 5 safe with large drives over 8TB?",
+		answer: "RAID 5 with drives larger than 8-10TB carries increased risk during rebuild. The problem is URE (Unrecoverable Read Error) probability - consumer drives are typically rated at 1 error per 12.5TB read (10^-14 URE rate). During a RAID 5 rebuild with large drives, you must read all data from remaining drives, and the probability of encountering a URE increases with capacity. If a URE occurs during rebuild, you may lose the entire array. For drives over 8TB, RAID 6 is strongly recommended as it can survive both a failed drive and a URE during rebuild."
+	},
+	{
+		question: "How many drives can fail in RAID 6?",
+		answer: "RAID 6 can tolerate up to 2 simultaneous drive failures in a single array. The array remains operational and data stays accessible even with two failed drives. This makes RAID 6 significantly safer than RAID 5 during rebuild operations and for arrays with large-capacity drives where URE risk is higher."
+	},
+	{
+		question: "What's the difference between RAID 10 and RAID 01?",
+		answer: "RAID 10 (1+0) creates mirrors first, then stripes across them. RAID 01 (0+1) creates stripes first, then mirrors them. RAID 10 is superior because it can survive multiple drive failures as long as they're not in the same mirror pair. RAID 01 can only survive one drive failure per stripe set. RAID 10 also has better rebuild characteristics. Always use RAID 10 over RAID 01."
+	},
+	{
+		question: "Can I mix different size drives in a RAID array?",
+		answer: "Yes, you can mix drive sizes in most RAID configurations, but the array will use the smallest drive's capacity for all drives. For example, in RAID 5 with three 4TB drives and one 2TB drive, each drive is treated as 2TB, wasting 6TB total capacity. For best efficiency, use identical drive sizes. Our calculator handles mixed sizes and shows you the capacity impact."
+	},
+	{
+		question: "What is rebuild time and why does it matter?",
+		answer: "Rebuild time is how long it takes to reconstruct data on a replacement drive after a failure. It matters because during rebuild your array has no redundancy (in RAID 5) or reduced redundancy (in RAID 6). If another drive fails during this vulnerable period, you risk total data loss. Large drives (10TB+) can take 24-72 hours to rebuild, depending on controller speed and system load. Rebuild time increases with drive capacity, making RAID 6 increasingly important for large drives."
+	},
+	{
+		question: "Should I use hardware or software RAID?",
+		answer: "Hardware RAID uses a dedicated controller with its own processor and cache, while software RAID uses your system CPU. Hardware RAID typically offers better performance and battery-backed cache for write protection, but is more expensive and creates vendor lock-in. Software RAID (mdadm, ZFS, Storage Spaces) is free, flexible, and can be moved between systems, but may use system resources. For enterprise use, hardware RAID is standard. For home NAS, modern software RAID (especially ZFS) is excellent and often preferred."
+	},
+	{
+		question: "What is URE and why should I care?",
+		answer: "URE (Unrecoverable Read Error) is when a drive cannot read a sector even after multiple attempts. Consumer drives are rated at 10^-14 (one error per 12.5TB read). During a RAID rebuild, the controller reads all data from surviving drives. With a 12TB drive, you're reading 12TB, giving roughly 100% probability of encountering a URE. If this happens during a RAID 5 rebuild, the array fails completely. This is why RAID 6 is critical for large drives - it can survive a URE during rebuild."
+	},
+	{
+		question: "Can RAID replace backups?",
+		answer: "No. RAID protects against drive failure, not against deletion, corruption, ransomware, fire, theft, or user error. RAID is availability (keeping your system running), not backup (protecting against data loss). Follow the 3-2-1 rule: 3 copies of data, on 2 different media types, with 1 copy off-site. Always have backups separate from your RAID array."
+	},
+	{
+		question: "How do I choose between RAID 5 and RAID 6?",
+		answer: "Choose RAID 5 for: 3-6 drives with capacity ≤8TB each, when capacity efficiency matters, read-heavy workloads, and acceptable downtime for rebuild. Choose RAID 6 for: drives >8TB, mission-critical data, 6+ drive arrays, when you need to survive rebuild with safety margin, or 24/7 production systems. The capacity cost of RAID 6 (one extra parity drive) is worth the significantly improved safety, especially with modern large-capacity drives."
+	},
+	{
+		question: "What's the fastest RAID level?",
+		answer: "For read performance: RAID 0 and RAID 10 are fastest (full striping benefit). For write performance: RAID 0 is fastest, followed by RAID 10 and RAID 1 (no parity overhead). RAID 5/6 have write penalties due to parity calculations. For databases and high-I/O applications, RAID 10 offers the best balance of speed and safety. RAID 50/60 provide good performance for very large arrays."
+	},
+	{
+		question: "Do I need hot spares?",
+		answer: "Hot spares are drives that sit idle and automatically begin rebuilding when a drive fails, reducing the time your array operates without full redundancy. They're recommended for: enterprise systems, large arrays (8+ drives), systems where downtime for drive replacement is difficult, and critical 24/7 operations. For home NAS, hot spares are optional - you can manually replace a failed drive. However, having a spare on hand is always wise."
+	},
+	{
+		question: "What happens if I lose the RAID controller?",
+		answer: "With hardware RAID, controller failure can be catastrophic. You often need an identical controller model to access the array. This is called vendor lock-in. Always keep a spare controller for critical systems. With software RAID, you can move drives to any compatible system. This makes software RAID (mdadm, ZFS) more flexible for recovery. Always document your RAID configuration and keep backups."
+	},
+	{
+		question: "Can I expand a RAID array by adding drives?",
+		answer: "It depends on your RAID level and controller. Some controllers support online capacity expansion (adding drives to existing array). RAID 5/6 can often be expanded, while RAID 1/10 require specific controller support. Software RAID (mdadm, ZFS) typically supports expansion. However, expansion can take days and puts the array at risk during migration. Always backup before expanding. Some systems require full rebuild, which may not be practical."
+	},
+	{
+		question: "Why is RAID 6 write performance slower than RAID 5?",
+		answer: "RAID 6 uses two independent parity calculations (P+Q parity) instead of RAID 5's single parity. Each write requires reading old data and parity, calculating two new parity blocks, then writing new data and both parities. This is called the RAID write penalty. RAID 6 typically has 15-20% worse write performance than RAID 5, but the safety benefit (surviving two drive failures) makes it worthwhile for large drives and critical data."
+	},
+	{
+		question: "What's better for NAS: RAID 5, RAID 6, or SHR?",
+		answer: "For Synology NAS, SHR (Synology Hybrid RAID) is often best - it's flexible RAID that optimizes capacity with mixed drives and allows easy expansion. For other NAS: Use RAID 5 for 3-4 drives ≤8TB (balanced capacity/performance), RAID 6 for 4+ drives >8TB (better safety), or RAID 10 for performance-critical applications (databases, VMs). Most home users with 4-bay NAS and 8-12TB drives should use RAID 6 or equivalent."
+	}
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead 
+			title={`Frequently Asked Questions - RAID Calculator | ${SITE_TITLE}`} 
+			description="Common questions about RAID levels, capacity calculations, rebuild times, drive failures, URE risk, and choosing the right RAID configuration for your storage needs." 
+		/>
+		
+		<!-- FAQ Schema Markup for Rich Snippets -->
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "FAQPage",
+			"mainEntity": faqs.map(faq => ({
+				"@type": "Question",
+				"name": faq.question,
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": faq.answer
+				}
+			}))
+		})} />
+	</head>
+	<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-purple-900 dark:to-slate-900">
+		<Header />
+		<main class="py-12 px-4">
+			<div class="max-w-4xl mx-auto">
+				<div class="text-center mb-12">
+					<h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+						Frequently Asked Questions
+					</h1>
+					<p class="text-xl text-gray-600 dark:text-gray-300">
+						Common questions about RAID configurations, safety, and performance
+					</p>
+				</div>
+
+				<div class="space-y-6">
+					{faqs.map((faq, index) => (
+						<div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition">
+							<h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+								{index + 1}. {faq.question}
+							</h2>
+							<p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+								{faq.answer}
+							</p>
+						</div>
+					))}
+				</div>
+
+				<!-- Additional Resources -->
+				<div class="mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8 text-center">
+					<h2 class="text-3xl font-bold text-white mb-4">
+						Still Have Questions?
+					</h2>
+					<p class="text-xl text-blue-100 mb-6">
+						Try our calculator or read our comprehensive RAID guides
+					</p>
+					<div class="flex flex-col sm:flex-row gap-4 justify-center">
+						<a href="/calculator" class="inline-block px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition">
+							Use Calculator
+						</a>
+						<a href="/guides" class="inline-block px-6 py-3 bg-blue-700 text-white font-semibold rounded-lg hover:bg-blue-800 transition border-2 border-white">
+							Read Guides
+						</a>
+					</div>
+				</div>
+
+				<!-- Topics Index -->
+				<div class="mt-12 bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+					<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Topics Covered</h3>
+					<div class="grid md:grid-cols-2 gap-3">
+						<div class="flex items-start gap-2">
+							<span class="text-blue-600 dark:text-blue-400">•</span>
+							<span class="text-gray-700 dark:text-gray-300">RAID 5 vs RAID 6 safety</span>
+						</div>
+						<div class="flex items-start gap-2">
+							<span class="text-blue-600 dark:text-blue-400">•</span>
+							<span class="text-gray-700 dark:text-gray-300">URE (Unrecoverable Read Errors)</span>
+						</div>
+						<div class="flex items-start gap-2">
+							<span class="text-blue-600 dark:text-blue-400">•</span>
+							<span class="text-gray-700 dark:text-gray-300">Rebuild times and risks</span>
+						</div>
+						<div class="flex items-start gap-2">
+							<span class="text-blue-600 dark:text-blue-400">•</span>
+							<span class="text-gray-700 dark:text-gray-300">Mixed drive sizes</span>
+						</div>
+						<div class="flex items-start gap-2">
+							<span class="text-blue-600 dark:text-blue-400">•</span>
+							<span class="text-gray-700 dark:text-gray-300">Hardware vs software RAID</span>
+						</div>
+						<div class="flex items-start gap-2">
+							<span class="text-blue-600 dark:text-blue-400">•</span>
+							<span class="text-gray-700 dark:text-gray-300">RAID vs backups</span>
+						</div>
+						<div class="flex items-start gap-2">
+							<span class="text-blue-600 dark:text-blue-400">•</span>
+							<span class="text-gray-700 dark:text-gray-300">Performance comparisons</span>
+						</div>
+						<div class="flex items-start gap-2">
+							<span class="text-blue-600 dark:text-blue-400">•</span>
+							<span class="text-gray-700 dark:text-gray-300">Hot spares and expansion</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

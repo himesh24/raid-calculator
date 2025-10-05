@@ -1,0 +1,9 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://raidcalculator.net/sitemap-index.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1

@@ -1,0 +1,421 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const raids = [
+	{
+		level: '0',
+		name: 'RAID 0',
+		minDrives: 2,
+		capacity: '100%',
+		tolerance: '0 drives',
+		performance: 'Excellent',
+		readSpeed: '★★★★★',
+		writeSpeed: '★★★★★',
+		redundancy: 'None',
+		costPerTB: 'Lowest',
+		rebuildTime: 'N/A',
+		useCase: 'Speed-critical, temporary data',
+		pros: ['Maximum capacity', 'Best performance', 'Simple setup'],
+		cons: ['No redundancy', 'Any failure = data loss', 'High risk'],
+		color: 'red'
+	},
+	{
+		level: '1',
+		name: 'RAID 1',
+		minDrives: 2,
+		capacity: '50%',
+		tolerance: '1 drive',
+		performance: 'Good',
+		readSpeed: '★★★★☆',
+		writeSpeed: '★★★☆☆',
+		redundancy: 'High',
+		costPerTB: 'Highest',
+		rebuildTime: 'Fast',
+		useCase: '2-4 drives, critical data',
+		pros: ['Simple and reliable', 'Fast rebuild', 'Good read speed'],
+		cons: ['50% capacity loss', 'Expensive per TB', 'Write speed limited'],
+		color: 'blue'
+	},
+	{
+		level: '5',
+		name: 'RAID 5',
+		minDrives: 3,
+		capacity: '67-87%',
+		tolerance: '1 drive',
+		performance: 'Good',
+		readSpeed: '★★★★☆',
+		writeSpeed: '★★★☆☆',
+		redundancy: 'Medium',
+		costPerTB: 'Medium',
+		rebuildTime: 'Slow',
+		useCase: 'General NAS, ≤8TB drives',
+		pros: ['Good capacity', 'Balanced performance', 'Standard solution'],
+		cons: ['Write penalty', 'Risky with large drives', 'Slow rebuild'],
+		color: 'green'
+	},
+	{
+		level: '6',
+		name: 'RAID 6',
+		minDrives: 4,
+		capacity: '50-83%',
+		tolerance: '2 drives',
+		performance: 'Good',
+		readSpeed: '★★★★☆',
+		writeSpeed: '★★☆☆☆',
+		redundancy: 'Very High',
+		costPerTB: 'Medium-High',
+		rebuildTime: 'Very Slow',
+		useCase: 'Large drives, mission-critical',
+		pros: ['Dual failure protection', 'Safe with large drives', 'Better URE protection'],
+		cons: ['Slower writes', 'Lower capacity vs RAID 5', 'Complex parity'],
+		color: 'purple'
+	},
+	{
+		level: '10',
+		name: 'RAID 10',
+		minDrives: 4,
+		capacity: '50%',
+		tolerance: '1 per pair',
+		performance: 'Excellent',
+		readSpeed: '★★★★★',
+		writeSpeed: '★★★★☆',
+		redundancy: 'High',
+		costPerTB: 'Highest',
+		rebuildTime: 'Fast',
+		useCase: 'Databases, VMs, high I/O',
+		pros: ['Best performance', 'Fast rebuild', 'High reliability'],
+		cons: ['50% capacity', 'Expensive', 'Needs even drives'],
+		color: 'indigo'
+	},
+	{
+		level: '50',
+		name: 'RAID 50',
+		minDrives: 6,
+		capacity: '67-83%',
+		tolerance: '1 per group',
+		performance: 'Very Good',
+		readSpeed: '★★★★★',
+		writeSpeed: '★★★★☆',
+		redundancy: 'Medium',
+		costPerTB: 'Medium',
+		rebuildTime: 'Medium',
+		useCase: 'Large arrays, performance',
+		pros: ['Better than RAID 5', 'Good for large arrays', 'Faster rebuild'],
+		cons: ['Complex setup', 'Needs 6+ drives', 'Multiple parity drives'],
+		color: 'cyan'
+	},
+	{
+		level: '60',
+		name: 'RAID 60',
+		minDrives: 8,
+		capacity: '50-75%',
+		tolerance: '2 per group',
+		performance: 'Very Good',
+		readSpeed: '★★★★★',
+		writeSpeed: '★★★☆☆',
+		redundancy: 'Very High',
+		costPerTB: 'High',
+		rebuildTime: 'Very Slow',
+		useCase: 'Enterprise, maximum safety',
+		pros: ['Maximum protection', 'Scalable', 'Multiple group tolerance'],
+		cons: ['Very complex', 'Expensive', 'Needs 8+ drives'],
+		color: 'orange'
+	}
+];
+
+const comparisons = [
+	{
+		title: 'RAID 5 vs RAID 6',
+		subtitle: 'The Classic Dilemma',
+		raid1: raids.find(r => r.level === '5'),
+		raid2: raids.find(r => r.level === '6'),
+		verdict: 'Use RAID 5 for drives ≤8TB in 3-6 drive arrays. Use RAID 6 for drives >8TB or mission-critical data. The extra parity in RAID 6 significantly reduces rebuild risk.',
+		scenarios: [
+			{ case: '4×4TB NAS', winner: 'RAID 5', reason: 'Good capacity/safety balance' },
+			{ case: '6×12TB NAS', winner: 'RAID 6', reason: 'URE risk too high for RAID 5' },
+			{ case: '8×8TB Media Server', winner: 'RAID 6', reason: 'Safety during long rebuilds' }
+		]
+	},
+	{
+		title: 'RAID 10 vs RAID 6',
+		subtitle: 'Performance vs Capacity',
+		raid1: raids.find(r => r.level === '10'),
+		raid2: raids.find(r => r.level === '6'),
+		verdict: 'RAID 10 wins for performance (databases, VMs). RAID 6 wins for capacity and safety with large drives. Cost per TB is much better with RAID 6.',
+		scenarios: [
+			{ case: 'Database Server', winner: 'RAID 10', reason: 'Best I/O performance' },
+			{ case: 'File/Media Storage', winner: 'RAID 6', reason: 'Better capacity efficiency' },
+			{ case: '4-drive Critical System', winner: 'RAID 10', reason: 'Fast rebuild, high reliability' }
+		]
+	},
+	{
+		title: 'RAID 1 vs RAID 5',
+		subtitle: 'Small Arrays',
+		raid1: raids.find(r => r.level === '1'),
+		raid2: raids.find(r => r.level === '5'),
+		verdict: 'For 2 drives, RAID 1 only option. For 3-4 drives, RAID 5 offers better capacity. RAID 1 has faster rebuild and simpler management.',
+		scenarios: [
+			{ case: '2-bay NAS', winner: 'RAID 1', reason: 'Only option for 2 drives' },
+			{ case: '3×4TB Array', winner: 'RAID 5', reason: '67% vs 50% capacity' },
+			{ case: 'Boot Drive Redundancy', winner: 'RAID 1', reason: 'Simple, reliable' }
+		]
+	}
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead 
+			title={`RAID Level Comparison - Which RAID is Right for You? | ${SITE_TITLE}`} 
+			description="Compare RAID 0, 1, 5, 6, 10, 50, and 60 side-by-side. Detailed analysis of capacity, performance, redundancy, and cost to help you choose the best RAID level." 
+		/>
+	</head>
+	<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-purple-900 dark:to-slate-900">
+		<Header />
+		<main class="py-12 px-4">
+			<div class="max-w-7xl mx-auto">
+				<div class="text-center mb-12">
+					<h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+						RAID Level Comparison
+					</h1>
+					<p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+						Compare RAID configurations side-by-side to find the best fit for your storage needs
+					</p>
+				</div>
+
+				<!-- Quick Comparison Table -->
+				<div class="mb-16 overflow-x-auto">
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Quick Reference</h2>
+					<div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-lg">
+						<table class="w-full">
+							<thead class="bg-gray-100 dark:bg-gray-700">
+								<tr>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Level</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Min Drives</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Capacity</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Tolerance</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Read</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Write</th>
+									<th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Best For</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+								{raids.map(raid => (
+									<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+										<td class="px-4 py-3">
+											<span class={`font-bold text-${raid.color}-600 dark:text-${raid.color}-400`}>
+												{raid.name}
+											</span>
+										</td>
+										<td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{raid.minDrives}</td>
+										<td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{raid.capacity}</td>
+										<td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{raid.tolerance}</td>
+										<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{raid.readSpeed}</td>
+										<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{raid.writeSpeed}</td>
+										<td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">{raid.useCase}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<!-- Detailed Cards -->
+				<div class="mb-16">
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Detailed Comparison</h2>
+					<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+						{raids.map(raid => (
+							<div class={`bg-white dark:bg-gray-800 rounded-xl p-6 border-2 border-${raid.color}-200 dark:border-${raid.color}-800 shadow-lg`}>
+								<h3 class={`text-2xl font-bold text-${raid.color}-600 dark:text-${raid.color}-400 mb-4`}>
+									{raid.name}
+								</h3>
+								
+								<div class="space-y-3 mb-4">
+									<div class="flex justify-between">
+										<span class="text-sm text-gray-600 dark:text-gray-400">Usable Capacity:</span>
+										<span class="font-semibold text-gray-900 dark:text-white">{raid.capacity}</span>
+									</div>
+									<div class="flex justify-between">
+										<span class="text-sm text-gray-600 dark:text-gray-400">Failure Tolerance:</span>
+										<span class="font-semibold text-gray-900 dark:text-white">{raid.tolerance}</span>
+									</div>
+									<div class="flex justify-between">
+										<span class="text-sm text-gray-600 dark:text-gray-400">Redundancy:</span>
+										<span class="font-semibold text-gray-900 dark:text-white">{raid.redundancy}</span>
+									</div>
+									<div class="flex justify-between">
+										<span class="text-sm text-gray-600 dark:text-gray-400">Cost per TB:</span>
+										<span class="font-semibold text-gray-900 dark:text-white">{raid.costPerTB}</span>
+									</div>
+									<div class="flex justify-between">
+										<span class="text-sm text-gray-600 dark:text-gray-400">Rebuild Time:</span>
+										<span class="font-semibold text-gray-900 dark:text-white">{raid.rebuildTime}</span>
+									</div>
+								</div>
+
+								<div class="mb-4">
+									<div class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Pros:</div>
+									<ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+										{raid.pros.map(pro => (
+											<li class="flex items-start gap-2">
+												<span class="text-green-600 dark:text-green-400">✓</span>
+												<span>{pro}</span>
+											</li>
+										))}
+									</ul>
+								</div>
+
+								<div>
+									<div class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Cons:</div>
+									<ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+										{raid.cons.map(con => (
+											<li class="flex items-start gap-2">
+												<span class="text-red-600 dark:text-red-400">✗</span>
+												<span>{con}</span>
+											</li>
+										))}
+									</ul>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+
+				<!-- Head-to-Head Comparisons -->
+				<div class="mb-16">
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Head-to-Head Comparisons</h2>
+					<div class="space-y-8">
+						{comparisons.map(comp => (
+							<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700 shadow-lg">
+								<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{comp.title}</h3>
+								<p class="text-gray-600 dark:text-gray-400 mb-6">{comp.subtitle}</p>
+
+								<div class="grid md:grid-cols-2 gap-6 mb-6">
+									<div class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+										<h4 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-3">{comp.raid1.name}</h4>
+										<div class="space-y-2 text-sm">
+											<div><strong>Capacity:</strong> {comp.raid1.capacity}</div>
+											<div><strong>Tolerance:</strong> {comp.raid1.tolerance}</div>
+											<div><strong>Performance:</strong> {comp.raid1.performance}</div>
+											<div><strong>Cost/TB:</strong> {comp.raid1.costPerTB}</div>
+										</div>
+									</div>
+									<div class="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
+										<h4 class="text-xl font-bold text-purple-900 dark:text-purple-100 mb-3">{comp.raid2.name}</h4>
+										<div class="space-y-2 text-sm">
+											<div><strong>Capacity:</strong> {comp.raid2.capacity}</div>
+											<div><strong>Tolerance:</strong> {comp.raid2.tolerance}</div>
+											<div><strong>Performance:</strong> {comp.raid2.performance}</div>
+											<div><strong>Cost/TB:</strong> {comp.raid2.costPerTB}</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 mb-4">
+									<h4 class="font-bold text-gray-900 dark:text-white mb-2">Verdict:</h4>
+									<p class="text-gray-700 dark:text-gray-300">{comp.verdict}</p>
+								</div>
+
+								<div>
+									<h4 class="font-bold text-gray-900 dark:text-white mb-3">Example Scenarios:</h4>
+									<div class="space-y-2">
+										{comp.scenarios.map(scenario => (
+											<div class="flex items-start gap-3 text-sm">
+												<span class="font-semibold text-gray-900 dark:text-white min-w-[140px]">{scenario.case}:</span>
+												<span class="text-green-600 dark:text-green-400 font-semibold min-w-[80px]">{scenario.winner}</span>
+												<span class="text-gray-600 dark:text-gray-400">- {scenario.reason}</span>
+											</div>
+										))}
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+
+				<!-- Decision Matrix -->
+				<div class="mb-16">
+					<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Decision Guide</h2>
+					<div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700 shadow-lg">
+						<div class="space-y-6">
+							<div>
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Choose RAID 0 if:</h3>
+								<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+									<li>Maximum speed is critical and data is backed up elsewhere</li>
+									<li>Temporary scratch space or cache storage</li>
+									<li>You understand the risk and have backups</li>
+								</ul>
+							</div>
+
+							<div>
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Choose RAID 1 if:</h3>
+								<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+									<li>You have only 2 drives</li>
+									<li>Simple redundancy for boot/OS drives</li>
+									<li>Critical data with limited capacity needs</li>
+								</ul>
+							</div>
+
+							<div>
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Choose RAID 5 if:</h3>
+								<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+									<li>3-6 drives with capacity ≤8TB each</li>
+									<li>Balanced capacity/performance/redundancy needed</li>
+									<li>Read-heavy workloads (media storage, file server)</li>
+								</ul>
+							</div>
+
+							<div>
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Choose RAID 6 if:</h3>
+								<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+									<li>Drives larger than 8TB</li>
+									<li>Mission-critical data requiring high availability</li>
+									<li>You want protection during rebuild</li>
+									<li>4+ drive arrays where safety is paramount</li>
+								</ul>
+							</div>
+
+							<div>
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Choose RAID 10 if:</h3>
+								<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+									<li>Database server or VM datastore</li>
+									<li>High I/O, transaction-heavy workloads</li>
+									<li>Performance is more important than capacity</li>
+									<li>You have even number of drives (4, 6, 8)</li>
+								</ul>
+							</div>
+
+							<div>
+								<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Choose RAID 50/60 if:</h3>
+								<ul class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-1">
+									<li>Large arrays (12-48 drives)</li>
+									<li>Enterprise storage requirements</li>
+									<li>Need performance better than single RAID 5/6</li>
+									<li>Complex setup is acceptable</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- CTA -->
+				<div class="text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-8">
+					<h2 class="text-3xl font-bold text-white mb-4">
+						Ready to Calculate Your Configuration?
+					</h2>
+					<p class="text-xl text-blue-100 mb-6">
+						Use our calculator to see exact capacity, costs, and risks for your chosen RAID level
+					</p>
+					<a href="/calculator" class="inline-block px-8 py-4 bg-white text-blue-600 text-lg font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
+						Launch Calculator
+					</a>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
