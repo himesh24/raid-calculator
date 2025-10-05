@@ -1,19 +1,16 @@
 {
   "name": "raid-calculator",
-  "description": "Build a personal website, blog, or portfolio with Astro.",
+  "description": "Professional RAID Calculator - Calculate storage capacity, rebuild times, URE risk, and costs for RAID configurations.",
   "private": true,
-  "cloudflare": {
-    "label": "Astro Framework Starter",
-    "products": [
-      "Workers"
-    ],
-    "categories": [],
-    "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/394ca3c9-d351-4036-035a-9f6dfa26dd00/public",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/f40a6577-eed5-4f3e-cef4-b5ef0a1be100/preview",
-    "publish": true
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "astro": "astro",
+    "build": "astro build",
+    "dev": "astro dev",
+    "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.9",
     "@astrojs/mdx": "4.3.0",
     "@astrojs/react": "^4.4.0",
     "@astrojs/rss": "4.0.11",
@@ -25,20 +22,11 @@
     "lucide-react": "^0.544.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.14",
     "typescript": "5.8.3"
   },
   "devDependencies": {
-    "wrangler": "4.21.x"
-  },
-  "scripts": {
-    "astro": "astro",
-    "build": "astro build",
-    "cf-typegen": "wrangler types",
-    "check": "astro build && tsc && wrangler deploy --dry-run",
-    "deploy": "wrangler deploy",
-    "dev": "astro dev",
-    "preview": "astro build && wrangler dev"
-  },
-  "type": "module"
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.14"
+  }
 }
