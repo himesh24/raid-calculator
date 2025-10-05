@@ -10,40 +10,108 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
+	<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-purple-900 dark:to-slate-900">
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<!-- Hero Section -->
+			<section class="py-20 px-4">
+				<div class="max-w-6xl mx-auto text-center">
+					<h1 class="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+						Professional RAID Calculator
+					</h1>
+					<p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+						Calculate storage capacity, rebuild times, URE risk, and costs for RAID 0, 1, 1E, 10, 5, 50, 5E, 5EE, 6, and 60 configurations
+					</p>
+					<div class="flex flex-col sm:flex-row gap-4 justify-center">
+						<a href="/calculator" class="px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition shadow-lg">
+							Launch Calculator
+						</a>
+						<a href="/about" class="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-lg font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition border border-gray-300 dark:border-gray-600">
+							Learn More
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<!-- Features -->
+			<section class="py-16 px-4 bg-white dark:bg-gray-800">
+				<div class="max-w-6xl mx-auto">
+					<h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
+						Advanced Features
+					</h2>
+					<div class="grid md:grid-cols-3 gap-8">
+						<div class="p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 rounded-xl border border-blue-200 dark:border-blue-800">
+							<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">10 RAID Levels</h3>
+							<p class="text-gray-600 dark:text-gray-300">Support for RAID 0, 1, 1E, 10, 5, 50, 5E, 5EE, 6, and 60 with accurate calculations for each configuration.</p>
+						</div>
+						<div class="p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 rounded-xl border border-green-200 dark:border-green-800">
+							<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Mixed Drive Sizes</h3>
+							<p class="text-gray-600 dark:text-gray-300">Intelligent handling of arrays with different drive capacities, automatically calculating based on minimum size.</p>
+						</div>
+						<div class="p-6 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/30 dark:to-red-900/30 rounded-xl border border-orange-200 dark:border-orange-800">
+							<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Risk Analysis</h3>
+							<p class="text-gray-600 dark:text-gray-300">Calculate URE probability, rebuild times, annual data loss risk, and get warnings for risky configurations.</p>
+						</div>
+						<div class="p-6 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-xl border border-purple-200 dark:border-purple-800">
+							<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">NAS Presets</h3>
+							<p class="text-gray-600 dark:text-gray-300">Quick configuration for popular Synology, QNAP, and custom NAS models with common bay counts.</p>
+						</div>
+						<div class="p-6 bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-900/30 dark:to-amber-900/30 rounded-xl border border-yellow-200 dark:border-yellow-800">
+							<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Cost & Power</h3>
+							<p class="text-gray-600 dark:text-gray-300">Analyze total cost, cost per TB, power consumption, and heat output for your array configuration.</p>
+						</div>
+						<div class="p-6 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/30 dark:to-blue-900/30 rounded-xl border border-cyan-200 dark:border-cyan-800">
+							<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Export & Share</h3>
+							<p class="text-gray-600 dark:text-gray-300">Export calculations to CSV or share configurations via link for collaboration and documentation.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- RAID Level Comparison -->
+			<section class="py-16 px-4">
+				<div class="max-w-6xl mx-auto">
+					<h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
+						RAID Level Quick Reference
+					</h2>
+					<div class="overflow-x-auto">
+						<table class="w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+							<thead class="bg-gray-100 dark:bg-gray-700">
+								<tr>
+									<th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">RAID Level</th>
+									<th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Min Drives</th>
+									<th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Failure Tolerance</th>
+									<th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Best Use Case</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+								<tr><td class="px-6 py-4 text-sm text-gray-900 dark:text-white font-medium">RAID 0</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">2</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">None</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Maximum speed, non-critical data</td></tr>
+								<tr><td class="px-6 py-4 text-sm text-gray-900 dark:text-white font-medium">RAID 1</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">2</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">1 drive</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Critical data, 2-4 drives</td></tr>
+								<tr><td class="px-6 py-4 text-sm text-gray-900 dark:text-white font-medium">RAID 5</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">3</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">1 drive</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Balanced performance & capacity</td></tr>
+								<tr><td class="px-6 py-4 text-sm text-gray-900 dark:text-white font-medium">RAID 6</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">4</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">2 drives</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Large drives, mission critical</td></tr>
+								<tr><td class="px-6 py-4 text-sm text-gray-900 dark:text-white font-medium">RAID 10</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">4</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">1 per mirror</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">High I/O, database servers</td></tr>
+								<tr><td class="px-6 py-4 text-sm text-gray-900 dark:text-white font-medium">RAID 50</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">6</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">1 per group</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Large arrays, high performance</td></tr>
+								<tr><td class="px-6 py-4 text-sm text-gray-900 dark:text-white font-medium">RAID 60</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">8</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">2 per group</td><td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Enterprise, maximum protection</td></tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+
+			<!-- CTA -->
+			<section class="py-16 px-4 bg-gradient-to-r from-blue-600 to-purple-600">
+				<div class="max-w-4xl mx-auto text-center">
+					<h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+						Ready to Calculate Your RAID Configuration?
+					</h2>
+					<p class="text-xl text-blue-100 mb-8">
+						Get accurate capacity, cost, and risk analysis in seconds
+					</p>
+					<a href="/calculator" class="inline-block px-8 py-4 bg-white text-blue-600 text-lg font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
+						Start Calculating Now
+					</a>
+				</div>
+			</section>
 		</main>
 		<Footer />
 	</body>

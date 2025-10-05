@@ -1,0 +1,31 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import RaidCalculator from '../components/RaidCalculator';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`RAID Calculator - ${SITE_TITLE}`} description="Calculate RAID storage capacity, cost, and efficiency with our interactive calculator" />
+	</head>
+	<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-purple-900 dark:to-slate-900">
+		<Header />
+		<main class="py-12">
+			<div class="max-w-7xl mx-auto px-4">
+				<div class="text-center mb-12">
+					<h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-4">
+						RAID Calculator
+					</h1>
+					<p class="text-xl text-gray-600 dark:text-gray-300">
+						Calculate storage capacity, cost, and efficiency for your RAID configuration
+					</p>
+				</div>
+				<RaidCalculator client:load />
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
